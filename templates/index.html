@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermarket Demand Forecast</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1b4c, #1e3c72);
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .form-box {
+            background: #ffffff;
+            color: #0d1b4c;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+            width: 400px;
+            margin: auto;
+        }
+        label {
+            font-size: 1rem;
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 10px;
+            border: 2px solid #1e3c72;
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #2a5298, #1e3c72);
+            transform: scale(1.05);
+        }
+        .results, .error {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .results {
+            background: #1e3c72;
+            color: #ffffff;
+        }
+        .error {
+            background: #ff4c4c;
+            color: white;
+        }
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+        }
+        th {
+            background: #2a5298;
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Supermarket Demand Forecast</h1>
+    <div class="form-box">
+        <form method="POST">
+            <label for="store_id">Select Store ID:</label>
+            <select name="store_id" required>
+                {% for store in valid_stores %}
+                    <option value="{{ store }}">{{ store }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="item_id">Select Item ID:</label>
+            <select name="item_id" required>
+                {% for item in valid_items %}
+                    <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="date">Start Date:</label>
+            <input type="date" name="date" required>
+
+            <button type="submit">Predict Sales</button>
+        </form>
+    </div>
+
+    {% if error_message %}
+    <div class="error">
+        ⚠️ {{ error_message }}
+    </div>
+    {% endif %}
+
+    {% if prediction_results %}
+    <div class="results">
+        <h2>Predicted Sales (Next 15 Days)</h2>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Predicted Sales</th>
+            </tr>
+            {% for date, pred in prediction_results %}
+            <tr>
+                <td>{{ date }}</td>
+                <td>{{ pred }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+</body>
+</html>
