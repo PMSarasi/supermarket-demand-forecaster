@@ -80,5 +80,5 @@ def index():
 
 # Change this at the bottom:
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Railway provides PORT
-    app.run(host="0.0.0.0", port=port)  # Must use 0.0.0.0 in production
+    # For local development only
+    app.run(host="0.0.0.0", port=8000, debug=False)# Must use 0.0.0.0 in production
