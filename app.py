@@ -3,12 +3,23 @@ import pandas as pd
 import joblib
 from datetime import datetime, timedelta
 from xgboost import XGBRegressor
+import os 
 
 app = Flask(__name__)
 
 # Load trained model
-model = XGBRegressor()
-model.load_model(os.path.join(os.path.dirname(__file__), "best_demand_forecast_model.xgb"))
+# Fixed version:
+try:
+    model = XGBRegressor()
+    model_path = os.path.join(os.path.dirname(__file__), "best_demand_forecast_model.xgb")
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model file not found at {model_path}")
+    model.load_model(model_path)
+    print("✅ Model loaded successfully!")
+except Exception as e:
+    print(f"❌ Failed to load model: {e}")
+    # Either raise the error or handle it gracefully
+    raise
 
 # Allowed options
 VALID_STORES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -67,5 +78,7 @@ def index():
         valid_items=VALID_ITEMS
     )
 
+# Change this at the bottom:
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8000))  # Railway provides PORT
+    app.run(host="0.0.0.0", port=port)  # Must use 0.0.0.0 in production
