@@ -2,11 +2,13 @@ from flask import Flask, render_template, request
 import pandas as pd
 import joblib
 from datetime import datetime, timedelta
+from xgboost import XGBRegressor
 
 app = Flask(__name__)
 
 # Load trained model
-model = joblib.load("/content/best_demand_forecast_model.pkl")
+model = XGBRegressor()  
+model.load_model("/content/best_demand_forecast_model.xgb")
 
 # Allowed options
 VALID_STORES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
