@@ -4,13 +4,27 @@ import joblib
 from datetime import datetime, timedelta
 from xgboost import XGBRegressor
 import os 
+import logging
 
+
+# Production WSGI Configuration (add here)
+if __name__ != "__main__":
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+    
 app = Flask(__name__)
 
+# Debugging setup (add here)
+print("=== DEBUG: Current Directory ===")
+print(os.path.abspath(os.path.dirname(__file__)))
+print("=== DEBUG: Contents ===")
+print(os.listdir(os.path.dirname(__file__)))
 # Load trained model
 # Fixed version:
+# Load trained model - MODIFIED VERSION
 try:
-    model = XGBRegressor()
+    model = XGBRegressor(tree_method='hist')  # <-- Changed here
     model_path = os.path.join(os.path.dirname(__file__), "best_demand_forecast.xgb")
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model file not found at {model_path}")
@@ -18,8 +32,8 @@ try:
     print("✅ Model loaded successfully!")
 except Exception as e:
     print(f"❌ Failed to load model: {e}")
-    # Either raise the error or handle it gracefully
     raise
+
 
 # Allowed options
 VALID_STORES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
