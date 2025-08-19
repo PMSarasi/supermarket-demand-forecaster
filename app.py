@@ -11,7 +11,7 @@ app = Flask(__name__)
 # Fixed version:
 try:
     model = XGBRegressor()
-    model_path = os.path.join(os.path.dirname(__file__), "best_demand_forecast_model.xgb")
+    model_path = os.path.join(os.path.dirname(__file__), "best_demand_forecast.xgb")
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model file not found at {model_path}")
     model.load_model(model_path)
