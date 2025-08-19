@@ -7,8 +7,8 @@ from xgboost import XGBRegressor
 app = Flask(__name__)
 
 # Load trained model
-model = XGBRegressor()  
-model.load_model("/content/best_demand_forecast_model.xgb")
+model = XGBRegressor()
+model.load_model(os.path.join(os.path.dirname(__file__), "best_demand_forecast_model.xgb"))
 
 # Allowed options
 VALID_STORES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
