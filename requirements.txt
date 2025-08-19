@@ -5,3 +5,4 @@ numpy
 pickle-mixin
 joblib 
 xgboost
+gunicorn
